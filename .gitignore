@@ -162,6 +162,7 @@ cython_debug/
 .idea/
 
 packages
+runs
 
 *.bak
 *.mp4
