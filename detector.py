@@ -13,7 +13,7 @@ from SFSORT import SFSORT
 @click.command()
 @click.option('--input_name', help="Путь до входного файла", 
                 type=click.Path(exists=True), required=True)
-@click.option('--output_name',  help="Путь до файла с результатами детекции (по умолчанию: output.mp4)", 
+@click.option('--output_name',  help="Путь до файла c результатами детекции (по умолчанию: output.mp4)", 
                 type=click.Path(), default='./output.mp4')
 @click.option('--mode',  help="Выбор сети для детекции: машины/танки (по умолчанию: cars)", 
                 type=click.Choice(['cars', 'tanks']), default='cars')
@@ -31,6 +31,7 @@ def main(input_name:str, output_name:str, mode:str, imshow:bool):
         device = select_device('0')
     except:
         device = select_device('cpu')
+    print(f'\nUSING DEVICE: {device}\n')
     model.to(device)
 
     cap = cv2.VideoCapture(input_name)
@@ -58,7 +59,7 @@ def main(input_name:str, output_name:str, mode:str, imshow:bool):
     tracker = SFSORT(tracker_arguments)
     colors = {}
     frame_count = 0
-    while cap.isOpened() and frame_count < 100:
+    while cap.isOpened() and frame_count < 500:
         ret, frame = cap.read()
         if not ret:
             break
@@ -92,7 +93,7 @@ def main(input_name:str, output_name:str, mode:str, imshow:bool):
             if cv2.waitKey(1) == ord('q'):
                 break
         
-        print(f'inf time: {round(time.time()-start_time, 2)} seconds\n')
+        print(f'inf time: {round(time.time()-start_time, 3)} seconds\n')
         out.write(annotated_frame)
     cap.release()
     out.release()

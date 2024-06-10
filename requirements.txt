@@ -1,5 +1,5 @@
 numpy==1.26.3
 opencv-python==4.9.0.80
 ultralytics==8.2.27
-lap==0.4.0
+scipy==1.13.1
 click==8.1.7

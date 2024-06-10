@@ -3,7 +3,7 @@
 ## Запуск
     
 ### 1) Установка пакетов
-
+	python -m pip install --upgrade pip
 	pip install -r requirements.txt
     
 ### 2) Запуск скрипта
@@ -18,4 +18,4 @@
 		--help               Show this message and exit.
 
 	Например: 
-	python detector.py --input_name tst1.mov --imshow true
+	python detector.py --input_name test_inputs/tst1.mov --imshow true
