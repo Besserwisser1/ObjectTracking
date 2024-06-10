@@ -16,6 +16,5 @@
 		--mode [cars|tanks]  Выбор сети для детекции: машины/танки (по умолчанию: cars)
 		--imshow BOOLEAN     Показывать видео на экране (по умолчанию: False)
 		--help               Show this message and exit.
-
-	Например: 
+#### Например
 	python detector.py --input_name test_inputs/tst1.mov --imshow true
