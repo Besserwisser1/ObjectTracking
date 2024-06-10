@@ -11,10 +11,14 @@ from SFSORT import SFSORT
 
 
 @click.command()
-@click.argument('input_name', type=click.Path(exists=True), required=True)
-@click.argument('output_name', type=click.Path(), default='./output.mp4')
-@click.argument('mode', type=click.Choice(['cars', 'tanks']), default='cars')
-@click.option('--imshow', type=click.BOOL, default=False)
+@click.option('--input_name', help="Путь до входного файла", 
+                type=click.Path(exists=True), required=True)
+@click.option('--output_name',  help="Путь до файла с результатами детекции (по умолчанию: output.mp4)", 
+                type=click.Path(), default='./output.mp4')
+@click.option('--mode',  help="Выбор сети для детекции: машины/танки (по умолчанию: cars)", 
+                type=click.Choice(['cars', 'tanks']), default='cars')
+@click.option('--imshow',  help="Показывать видео на экране (по умолчанию: False)", 
+                type=click.BOOL, default=False)
 def main(input_name:str, output_name:str, mode:str, imshow:bool):
     if mode=='cars':
         model = YOLO('weights/yolov8m.pt', 'detect')
