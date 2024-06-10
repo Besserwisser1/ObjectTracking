@@ -11,10 +11,17 @@ from SFSORT import SFSORT
 
 
 @click.command()
-@click.argument('input_name', type=click.Path(exists=True))
-@click.argument('output_name', type=click.Path())
-def main(input_name, output_name):
-    model = YOLO('weights/yolov8m.pt', 'detect')
+@click.argument('input_name', type=click.Path(exists=True), required=True)
+@click.argument('output_name', type=click.Path(), default='./output.mp4')
+@click.argument('mode', type=click.Choice(['cars', 'tanks']), default='cars')
+@click.option('--imshow', type=click.BOOL, default=False)
+def main(input_name:str, output_name:str, mode:str, imshow:bool):
+    if mode=='cars':
+        model = YOLO('weights/yolov8m.pt', 'detect')
+        classnum = 2
+    else:
+        model = YOLO('weights/yolov8s_tanks.pt', 'detect')
+        classnum = 0
 
     try:
         device = select_device('0')
@@ -55,7 +62,7 @@ def main(input_name, output_name):
         start_time = time.time()
         print(f"predict frame # {frame_count}/{frame_length}")
         prediction = model.predict(frame, imgsz=(640,640), conf=0.1, iou=0.45,
-                                    half=False, device=device, max_det=99, classes=2,
+                                    half=False, device=device, max_det=99, classes=classnum,
                                     verbose=False)
         prediction_results = prediction[0].boxes.cpu().numpy()
         tracks = tracker.update(prediction_results.xyxy, prediction_results.conf)
@@ -75,10 +82,11 @@ def main(input_name, output_name):
             annotated_frame = cv2.rectangle(frame, (x0, y0), (x1, y1), color, 2)
             cv2.putText(annotated_frame, str(track_id), (x0, y0-5),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
-
-        # cv2.imshow("result", annotated_frame)
-        # if cv2.waitKey(1) == ord('q'):
-        #     break
+        
+        if imshow:
+            cv2.imshow("result", annotated_frame)
+            if cv2.waitKey(1) == ord('q'):
+                break
         
         print(f'inf time: {round(time.time()-start_time, 2)} seconds\n')
         out.write(annotated_frame)
